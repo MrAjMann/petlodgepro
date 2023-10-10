@@ -79,7 +79,7 @@
 
 @layer components {
   .sidebar-link {
-    @apply h-10 px-4 py-2 inline-flex items-center  rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 w-full justify-start bg-secondary text-secondary-foreground hover:bg-secondary/80
+    @apply h-14 px-4 py-4 max-w-[16rem] inline-flex items-center rounded-md text-base font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 w-full justify-start bg-secondary text-secondary-foreground border  border-gray-400 hover:rounded-lg hover:bg-slate-700  hover:text-white  hover:border-green-500 hover:scale-105  duration-300
   }
 }
 

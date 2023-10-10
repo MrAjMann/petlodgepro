@@ -1,5 +1,7 @@
 "use client";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useMutation } from "@tanstack/react-query";
@@ -14,43 +16,73 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+
 import { db } from "@/lib/db";
-import { $tenants } from "@/lib/db/schema";
+
+// import bcrypt from "bcrypt";
 
 const formSchema = z.object({
-  tenantName: z.string().min(1, {
+  name: z.string().min(1, {
     message: "Tenant Name must not be empty min (1) char",
   }),
-  tenantEmail: z
+  email: z
     .string()
     .min(4, {
       message: "Tenant Email must not be empty min (4) char",
     })
     .email(),
+  password: z
+    .string()
+    .min(8, { message: "Password length needs to be at least 8 characters" }),
 });
 
-export default function NewTenantPage() {
-  // Must have super user admin privlidges
+type Props = {};
+const SignUp = (props: Props) => {
+  const { toast } = useToast();
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      tenantName: "",
-      tenantEmail: "",
+      name: "",
+      email: "",
+      password: "",
     },
   });
-
-  const newTenant = useMutation({
+  const newUser = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await axios.post(`/api/tenant/create`, {
-        tenantName: values.tenantName,
-        tenantEmail: values.tenantEmail,
+      const { name, email, password } = values;
+      // console.log("signup page", email);
+      const checkUser = await axios.post(`/api/user/view`, {
+        email,
       });
-      return response.data;
+
+      // console.log("page check user", checkUser);
+      if (checkUser.data !== null) {
+        toast({
+          title: "User already exists",
+          description: "This account already exists please sign in",
+          variant: "destructive",
+        });
+        // router.push("/signin");
+        throw new Error("User already exists pleae try again");
+      }
+
+      const newUser = await axios.post(`/api/user/create`, {
+        name: name,
+        email: email,
+        password: password,
+      });
+
+      router.push("/dashboard");
+
+      return newUser;
     },
   });
 
@@ -58,21 +90,20 @@ export default function NewTenantPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    newTenant.mutate(values);
-    router.push("/dashboard");
-    // console.log(values);
-  }
 
+    newUser.mutate(values);
+
+    // router.push("/dashboard");
+    console.log(values);
+  }
   return (
     <section className="min-h-screen my-14">
       <div>
-        <h1 className="text-4xl text-primary-foreground ">
-          Create a new Tenant
-        </h1>
+        <h1 className="text-4xl text-primary-foreground ">Sign Up</h1>
       </div>
       <div className="seperator"></div>
 
-      <div className="flex flex-col justify-center items-start h-full ">
+      <div className="flex flex-col absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
         <div className="w-96 mx-36 my-24">
           <Form {...form}>
             <form
@@ -81,17 +112,17 @@ export default function NewTenantPage() {
             >
               <FormField
                 control={form.control}
-                name="tenantName"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-300 text-lg">
-                      Tenant Name
+                      First Name
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="Tenant Name" {...field} />
                     </FormControl>
                     <FormDescription>
-                      This is the company/tenant name.
+                      This is the user's first name.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -99,22 +130,41 @@ export default function NewTenantPage() {
               ></FormField>
               <FormField
                 control={form.control}
-                name="tenantEmail"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-300 text-lg">
-                      Tenant Email
+                      Email
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Tenant Email"
+                        placeholder="User Email"
                         {...field}
                         className="border-slate-400"
                       />
                     </FormControl>
-                    <FormDescription>
-                      This is the company/tenant email.
-                    </FormDescription>
+                    <FormDescription>This is the user email.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              ></FormField>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-300 text-lg">
+                      Password
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="********"
+                        {...field}
+                        type="password"
+                        className="border-slate-400"
+                      />
+                    </FormControl>
+                    <FormDescription>Password.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -128,4 +178,5 @@ export default function NewTenantPage() {
       </div>
     </section>
   );
-}
+};
+export default SignUp;

@@ -33,20 +33,20 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border ">
+    <div className="w-full rounded-md  ">
       <div className="relative w-full overflow-auto">
         <Table className="w-full caption-bottom text-sm">
           <TableHeader className="[&_tr]:border-b">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                className="border-b transition-colors hover:bg-inherit data-[state=selected]:bg-muted"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
-                      className="h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
+                      className="h-12 px-2 text-left align-middle font-medium text-lg text-white [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]"
                     >
                       {header.isPlaceholder
                         ? null
@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+                  className="border-b transition-colors hover:bg-slate-400/10 "
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -82,7 +82,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="py-2 text-center"
                 >
                   No results...
                 </TableCell>
