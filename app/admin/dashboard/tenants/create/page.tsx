@@ -17,8 +17,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/db";
-import { $tenants } from "@/lib/db/schema";
+
 
 const formSchema = z.object({
   tenantName: z.string().min(1, {
@@ -46,7 +45,7 @@ export default function NewTenantPage() {
 
   const newTenant = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await axios.post(`/api/tenant/create`, {
+      const response = await axios.post(`/api/tenants/create`, {
         tenantName: values.tenantName,
         tenantEmail: values.tenantEmail,
       });
@@ -59,7 +58,7 @@ export default function NewTenantPage() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     newTenant.mutate(values);
-    router.push("/dashboard");
+    router.push("/admin/dashboard");
     // console.log(values);
   }
 

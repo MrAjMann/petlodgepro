@@ -1,6 +1,4 @@
-// import { SignOutButton } from "@clerk/nextjs";
-import SignOut from "../components/ui/signout";
-import { DashboardOverviewPanel } from "./components/dashboardOverviewPanel";
+import { DashboardOverviewPanel } from "../components/dashboardOverviewPanel";
 
 type Props = {};
 const DashboardPage = (props: Props) => {

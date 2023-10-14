@@ -1,23 +1,27 @@
-import { pgTable,timestamp,varchar,integer, primaryKey, text, serial } from 'drizzle-orm/pg-core';
+import { pgTable,timestamp,varchar,integer, primaryKey, text, serial, pgEnum } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from "@auth/core/adapters"
 
 
 
-export const $tenants = pgTable("tenants", {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+export const tenants = pgTable("tenants", {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
   tenantName: varchar("tenantName", { length: 255 }).notNull(),
   tenantEmail: varchar("email", { length: 255 }).notNull().unique(),
   createdAt: timestamp("createdAt", {mode: 'string'}).notNull().defaultNow(),
   updatedAt: timestamp("updatedAt", {mode: 'string'}).notNull().defaultNow()
 })
 
+export const roleEnum = pgEnum('role', ['ADMIN','TENANT','STAFF', 'CLIENT'])
+
 export const users = pgTable("user", {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   email: text("email").unique().notNull(),
+  tenantId: text('tenantId').notNull().references(() => tenants.id),
   password: text("password").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image")
+  image: text("image"),
+  role: roleEnum('role').default('CLIENT')
 })
 
 export const accounts = pgTable(
@@ -73,5 +77,5 @@ export const verificationTokens = pgTable(
 
 // Add PetsSchema
 
-export type TenantType = typeof $tenants.$inferInsert
+export type TenantType = typeof tenants.$inferInsert
 export type UserType = typeof users.$inferInsert

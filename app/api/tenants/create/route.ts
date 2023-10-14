@@ -1,5 +1,5 @@
 import { db } from '@/lib/db';
-import { $tenants } from '@/lib/db/schema';
+import { tenants } from '@/lib/db/schema';
 import { NextResponse } from 'next/server';
 
 
@@ -10,15 +10,15 @@ export async function POST(req: Request) {
   const { tenantName, tenantEmail } = body
   
 
-  const tenann_ids = await db.insert($tenants).values({
+  const tenant_ids = await db.insert(tenants).values({
     tenantName,
     tenantEmail
   }).returning({
-    insertedId: $tenants.id
+    insertedId: tenants.id
   })
 
   return NextResponse.json({
-    tenantId: tenann_ids[0].insertedId
+    tenantId: tenant_ids[0].insertedId
   })
 
 }

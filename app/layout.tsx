@@ -17,7 +17,6 @@ export default function RootLayout({
   session: Session;
   children: React.ReactNode;
 }) {
-  // console.log("layout", session);
   return (
     <html lang="en">
       <Provider session={session}>

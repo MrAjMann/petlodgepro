@@ -9,26 +9,7 @@ import {  users } from '../db/schema';
 
 
 export const authOptions: NextAuthOptions = {
-  session: {
-    strategy: 'jwt',
-  },
-  callbacks: {
-
-    async jwt({ token, user, account, profile, isNewUser }) {
-      // console.debug("callback jwt user:", user)
-      // console.debug("callback jwt token:", token)
-      // console.log('token',token)
-      user && (token.user )
-      return token
-  },
-    session: async ({ session }) => {
-      
-     
-    return session
-    },
-  
-
-},
+ 
 
   
   // @ts-ignore
@@ -41,9 +22,11 @@ export const authOptions: NextAuthOptions = {
         email: {label: "email", type: "email", placeholder: "jsmith@gmail.com"},
         password: {label:"password", type: "password"}
       },
+     
+      
 
       async authorize(credentials, req) {
-        
+      
         if (!credentials) {
           return new Error("Credentials not provided")
         }
@@ -63,6 +46,51 @@ export const authOptions: NextAuthOptions = {
       },
     }) 
   ],
+  session: {
+    strategy: 'jwt',
+  },
+  callbacks: {
+
+    async jwt({ token, user, session, trigger }){
+      // console.log('jwt callback', { token, user, session })
+      if (trigger === "update" && session?.name || session?.role) {
+        token.name = session.name
+        token.role = session.role
+      }
+
+      // pass role and user id to token
+      if (user) {
+        return {
+          ...token, 
+          id: user.id,
+          tenantId: user.tenantId,
+          role: user.role!,
+          }
+        }
+      
+      //  user && (token.user = user)
+      return token
+    },
+    
+    
+    async session({ session, token, user }) {
+      // console.log('session callback', {token, user, session})
+      
+        // pass user id and role to session
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          role: token.role,
+          tenantId: token.tenantId
+        }
+      };
+      // return session
+    },
+  
+
+},
   pages: {
     signIn: '/signin',
     newUser: '/signup',
@@ -70,6 +98,7 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
+  
 }
 
 

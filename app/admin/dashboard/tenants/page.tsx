@@ -1,24 +1,15 @@
-import { columns } from "./columns";
 import { db } from "@/lib/db";
-import { $tenants, TenantType } from "@/lib/db/schema";
-
+import { tenants, TenantType } from "@/lib/db/schema";
 import Link from "next/link";
-import { DataTable } from "./DataTable";
-import TenantViewer from "../components/tenantViewer";
-
-import { checkUserRole } from "@/lib/utils/userUtils";
-
+import TenantViewer from "../../components/tenantViewer";
 type Props = {};
 
 export async function getTenantData(): Promise<TenantType[]> {
-  return db.select().from($tenants);
+  return db.select().from(tenants);
 }
 
 const TenantDashboardPage = async () => {
-  // const { organization } = auth();
-  // const { session } = useSession();
-  const orgRole = "admin";
-  // console.log(organization);
+  const orgRole = "TENANT";
   const tenants = await getTenantData();
 
   return (
@@ -86,7 +77,7 @@ export default TenantDashboardPage;
 // export async function getTenants() {
 //   const notes = await db
 //     .select()
-//     .from($tenants)
+//     .from(tenants)
 
 //   return notes;
 // }

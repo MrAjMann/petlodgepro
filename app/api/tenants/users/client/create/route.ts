@@ -10,9 +10,8 @@ export async function POST(req: Request) {
 
   
   
-  const { name, email, password } = await body
+  const { name, email, password,role } = await body
   const newEmail = email
-
 
 
   const response = await db
@@ -31,7 +30,8 @@ export async function POST(req: Request) {
     name,
     email,
     password,
-    
+    role,
+    tenantId: 'd0a034f2-e0e2-4000-b81e-1ab6d7ac8510',
   }).returning({
     insertedId: users.id
   })

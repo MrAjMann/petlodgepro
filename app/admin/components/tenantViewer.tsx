@@ -1,9 +1,10 @@
 "use client";
 
 import { TenantType } from "@/lib/db/schema";
-import { DataTable } from "../tenants/DataTable";
-import { columns } from "../tenants/columns";
-import { Tenant } from "../tenants/schema";
+
+import { columns } from "../dashboard/tenants/columns";
+import { Tenant } from "../dashboard/tenants/schema";
+import { DataTable } from "../dashboard/tenants/DataTable";
 
 type Props = {};
 const TenantViewer = ({ data }: { data: Tenant[] }) => {
