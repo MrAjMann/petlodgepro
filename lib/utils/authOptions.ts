@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
         }
         
         const res = await db.select().from(users).where(and(eq(users.email, credentials.email  ),eq(users.password, credentials.password)));
-        // console.log('user id', res[0].id)
+       
 
         const user = res[0]
 
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
 
     async jwt({ token, user, session, trigger }){
-      // console.log('jwt callback', { token, user, session })
+     
       if (trigger === "update" && session?.name || session?.role) {
         token.name = session.name
         token.role = session.role
@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token, 
           id: user.id,
+          firstName: user.firstName,
           tenantId: user.tenantId,
           role: user.role!,
           }
@@ -74,7 +75,7 @@ export const authOptions: NextAuthOptions = {
     
     
     async session({ session, token, user }) {
-      // console.log('session callback', {token, user, session})
+      
       
         // pass user id and role to session
       return {
@@ -82,6 +83,7 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
+          firstName: token.firstName,
           role: token.role,
           tenantId: token.tenantId
         }

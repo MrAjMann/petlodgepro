@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { StaffOverviewPanel } from "../../components/staffOverviewPanel";
 
 type Props = {
   params: {
@@ -16,11 +17,14 @@ const StaffDashboardPage = async ({ params }: Props) => {
 
   const user = res[0];
   if (params.id === user?.tenantId || user) {
-    if (user.role === "CLIENT") {
+    if (user.role === "STAFF" || user.role === "TENANT") {
       return (
         <div>
           <div>
             <h1>View Staff Dashboard</h1>
+          </div>
+          <div className="">
+            <StaffOverviewPanel />
           </div>
         </div>
       );

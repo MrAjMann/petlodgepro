@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
   
   
-  const { name, email, password,role } = await body
+  const { firstName,lastName, email, password,role } = await body
   const newEmail = email
 
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     .from(users).where(eq(users.email, newEmail))
   
     if (response[0]) {
-      console.log('route response',response)
+     
       return NextResponse.json(null)
       
     }
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
 
   const user_id = await db.insert(users).values({
-    name,
+    firstName,lastName,
     email,
     password,
     role,

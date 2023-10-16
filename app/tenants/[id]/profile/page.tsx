@@ -1,7 +1,9 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import TenantProfle from "./form";
 import { users } from "@/lib/db/schema";
 import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/utils/authOptions";
 
 type Props = {
   params: {
@@ -10,18 +12,26 @@ type Props = {
 };
 
 const UserProfilePage = async ({ params }: Props) => {
+  const session = await getServerSession(authOptions);
   const res = await db
     .select()
     .from(users)
-    .where(eq(users.tenantId, params.id));
+    .where(and(eq(users.tenantId, params.id), eq(users.id, session?.user.id)));
 
   const user = res[0];
+  console.log(user);
   if (params.id === user?.tenantId || user) {
     if (user.role === "CLIENT") {
       return (
         <div>
           <div>
-            <h1>Client View</h1>
+            <div>
+              <h1 className="text-4xl text-primary-foreground ">
+                {user?.firstName}'s Profile
+              </h1>
+            </div>
+            <div className="seperator"></div>
+
             <TenantProfle user={user} />
           </div>
         </div>

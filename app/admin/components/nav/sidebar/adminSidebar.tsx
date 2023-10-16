@@ -8,9 +8,9 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function Sidebar({ className }: SidebarProps) {
+export function AdminSidebar({ className }: SidebarProps) {
   const { data: session, status } = useSession();
-  console.log("session", session, status);
+
   return (
     <div className={cn("pb-12 min-h-screen ", className)}>
       <div className="space-y-4 py-4">
@@ -20,12 +20,12 @@ export function Sidebar({ className }: SidebarProps) {
               PetLodge Pro
             </h2>
 
-            {session && (
+            {session && session.user && (
               <p className="text-muted-foreground">
                 Hello{" "}
                 <span className="font-medium text-sm ">
                   {" "}
-                  {session.user?.name}!{" "}
+                  {session?.user?.firstName}!{" "}
                 </span>
               </p>
             )}
@@ -59,15 +59,6 @@ export function Sidebar({ className }: SidebarProps) {
           </div>
         )}
       </div>
-
-      {/* {userRole === "" && (
-                 <div className="space-y-1">
-                  <Link className="sidebar-link" href={"/dashboard/tenants"}>
-                    <Home className="mr-2 w-4 h-4" />
-                    Tenants
-                  </Link>
-                </div>
-              )} */}
     </div>
   );
 }

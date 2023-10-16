@@ -7,7 +7,6 @@ import SignOut from "../ui/signout";
 const DektopMenu = () => {
   const router = useRouter();
   const { data: session, status, update } = useSession();
-  // console.log("useSession hook session object", session, status);
 
   return (
     <div className=" my-8  hidden md:w-full md:flex md:justify-between md:items-center max-h-[8rem] 2xl:mx-auto">

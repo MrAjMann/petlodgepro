@@ -58,12 +58,11 @@ const SignUp = (props: Props) => {
   const newUser = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const { name, email, password } = values;
-      // console.log("signup page", email);
+
       const checkUser = await axios.post(`/api/user/view`, {
         email,
       });
 
-      // console.log("page check user", checkUser);
       if (checkUser.data !== null) {
         toast({
           title: "User already exists",
@@ -94,7 +93,6 @@ const SignUp = (props: Props) => {
     newUser.mutate(values);
 
     // router.push("/dashboard");
-    console.log(values);
   }
   return (
     <section className="min-h-screen my-14">

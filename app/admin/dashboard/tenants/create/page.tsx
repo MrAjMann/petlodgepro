@@ -18,7 +18,6 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-
 const formSchema = z.object({
   tenantName: z.string().min(1, {
     message: "Tenant Name must not be empty min (1) char",
@@ -59,7 +58,6 @@ export default function NewTenantPage() {
     // ✅ This will be type-safe and validated.
     newTenant.mutate(values);
     router.push("/admin/dashboard");
-    // console.log(values);
   }
 
   return (

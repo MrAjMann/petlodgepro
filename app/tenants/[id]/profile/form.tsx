@@ -19,8 +19,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name must not be empty min (1) char",
+  firstName: z.string().min(1, {
+    message: "First name must not be empty min (1) char",
+  }),
+  lastName: z.string().min(1, {
+    message: "Last name must not be empty min (1) char",
   }),
   email: z
     .string()
@@ -39,7 +42,8 @@ export default function TenantProfle({ user }: any) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: `${email}`,
     },
   });
@@ -47,11 +51,12 @@ export default function TenantProfle({ user }: any) {
   const editClientInfo = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const response = await axios.post(`/api/tenants/users/client/edit`, {
-        name: values.name,
+        firstName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         // phone: values.phone,
       });
-      // console.log(response.data);
+
       return response.data;
     },
   });
@@ -81,18 +86,10 @@ export default function TenantProfle({ user }: any) {
 
     // router.push(`/tenants/${users.tenantId}/profile`);
     router.refresh();
-    // console.log(values);
   }
 
   return (
     <section className="min-h-screen my-14">
-      <div>
-        <h1 className="text-4xl text-primary-foreground ">
-          {user?.name}'s Profile
-        </h1>
-      </div>
-      <div className="seperator"></div>
-
       <div className="flex flex-col justify-center items-start h-full ">
         <div className="w-96 mx-36 my-24">
           <Form {...form}>
@@ -102,22 +99,44 @@ export default function TenantProfle({ user }: any) {
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-300 text-lg">
-                      Name
+                      First Name
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={`${user?.name}` || ""}
+                        placeholder={`${user?.firstName}` || ""}
                         {...field}
-                        // readOnly
+                        readOnly
                       />
                     </FormControl>
                     <FormDescription>
                       To change your name please contact PetLodgePro support
                     </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              ></FormField>
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-300 text-lg">
+                      Last Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        // readOnly={editState}
+                        readOnly
+                        placeholder={`${user?.lastName}`}
+                        {...field}
+                        className="border-slate-400"
+                      />
+                    </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -143,27 +162,7 @@ export default function TenantProfle({ user }: any) {
                   </FormItem>
                 )}
               ></FormField>
-              {/* <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-gray-300 text-lg">
-                      Phone
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        // readOnly={editState}
-                        // placeholder={`${user?.phone}`}
-                        {...field}
-                        className="border-slate-400"
-                      />
-                    </FormControl>
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField> */}
               <Button type="submit" variant={"secondary"} className="">
                 Submit
               </Button>

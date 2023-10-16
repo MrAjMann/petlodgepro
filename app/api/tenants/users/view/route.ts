@@ -19,7 +19,7 @@ export async function POST(req: Request) {
 
     
     if (!response[0]) {
-      // console.log('route response',response)
+     
       return NextResponse.json(null)
       
     }

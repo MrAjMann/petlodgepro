@@ -49,23 +49,19 @@ const SignIn = (props: Props) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // console.log(values);
-    
     try {
       const user = await signIn("credentials", {
         email: values.email,
         password: values.password,
         redirect: true,
       });
-      
+
       return user;
     } catch (err) {
-      // console.log("Error in user Form");
       router.push("/signin");
       return new Error("Error user not found");
       // router.refresh();
     }
-    
   }
   return (
     <section className="min-h-screen my-14">
