@@ -10,14 +10,7 @@ export async function getUserData(): Promise<UserType[]> {
 
 type Props = {};
 export const StaffOverviewPanel = async (props: Props) => {
-  // const { data: session, status } = useSession();
 
-  // const res = await db
-  //   .select()
-  //   .from(users)
-  //   .where(
-  //     and(eq(users.tenantId, session?.user.tenantId), eq(users.role, "TENANT"))
-  //   );
 
   const allUsers = await getUserData().then((value) => {
     return value;

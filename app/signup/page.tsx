@@ -74,7 +74,7 @@ const SignUp = (props: Props) => {
       }
 
       const newUser = await axios.post(`/api/user/create`, {
-        name: name,
+        name: firstName,
         email: email,
         password: password,
       });
@@ -110,7 +110,7 @@ const SignUp = (props: Props) => {
             >
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-gray-300 text-lg">

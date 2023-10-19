@@ -1,42 +1,27 @@
-"use client";
-
-import { Row } from "@tanstack/react-table";
-
-import { MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { userSchema } from './schema';
+import { MoreHorizontal } from "lucide-react";
 
-
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData>;
-}
-
-export function DataTableRowActions<TData>({
-  row,
-}: DataTableRowActionsProps<TData>) {
-  const user = userSchema.parse(row.original);
-
+type Props = {};
+function DropDownMenu({}: Props) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger
+        asChild
+        className="transition-colors duration-100 ease-in-out"
+      >
         <Button
           variant="default"
-          className="flex h-8 w-8 p-0 data-[state=open]:bg-slate-900"
+          className="flex h-16 w-16 p-2 data-[state=open]:bg-slate-900 border-2 hover:border-green-500 hover:bg-slate-900 data-[state=open]:rotate-90"
         >
-          <MoreHorizontal className="h-4 w-4" />
+          <MoreHorizontal className="h-8 w-8  " />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
@@ -53,3 +38,4 @@ export function DataTableRowActions<TData>({
     </DropdownMenu>
   );
 }
+export default DropDownMenu;

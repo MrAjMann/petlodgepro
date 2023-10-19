@@ -18,11 +18,12 @@ const currentEmail  = res[0].email
 
   const body = await req.json()
 
-  const { name, email } = await body
+  const { firstName,lastName, email } = await body
  
 
   const updatedUserDetails: { updatedEmail: string}[] = await db.update(users).set({
-    name: name,
+    firstName: firstName,
+    lastName: lastName,
     email: email,
 
   }).where(eq(

@@ -1,7 +1,4 @@
-import { db } from "@/lib/db";
 import { Sidebar } from "./components/nav/sidebar/sidebar";
-import { users } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
 
 export default async function DashboardLayout({
   children,
@@ -9,10 +6,10 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="grid lg:grid-cols-6 2xl:grid-cols-7 ">
-      <Sidebar className="hidden md:block lg:border-r" />
-      <div className="col-span-1 lg:col-span-5 2xl:col-span-6 ">
-        <div className="h-full px-4 py-4 lg:px-8  2xl:mx-48">{children}</div>
+    <section className="grid grid-cols-1 lg:grid-cols-6 2xl:grid-cols-7  ">
+      <Sidebar className="min-h-screen  hidden xl:block lg:border-r overflow-hidden" />
+      <div className="col-span-1 lg:col-span-6 2xl:col-span-6 ">
+        <div className=" px-4 py-4 lg:px-8 mx-auto ">{children}</div>
       </div>
     </section>
   );

@@ -1,11 +1,14 @@
 import { db } from "@/lib/db";
-import { UserType, users } from "@/lib/db/schema";
 
 import { eq, and } from "drizzle-orm";
 import { DashboardOverviewPanel } from "../../components/dashboardOverviewPanel";
 import Link from "next/link";
 
 import ClientViewer from "../../components/clientViewer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/utils/authOptions";
+import { User } from "./schema";
+import { UserType, users } from '@/lib/db/schema';
 
 type Props = {
   params: {
@@ -14,14 +17,17 @@ type Props = {
 };
 
 export async function getUserData(): Promise<UserType[]> {
-  return db.select().from(users);
+ return db.select().from(users);
+  
 }
 
-const TenantClientAdminPage = async ({ params }: Props) => {
-  const res = await db
-    .select()
-    .from(users)
-    .where(eq(users.tenantId, params.id));
+export default async function TenantClientAdminPage({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
 
   const allUsers = await getUserData().then((value) => {
     return value;
@@ -29,9 +35,7 @@ const TenantClientAdminPage = async ({ params }: Props) => {
 
   const ClientOnlyUsers = allUsers.filter((users) => users.role === "CLIENT");
 
-  const user = res[0];
-
-  if (params.id === user?.tenantId) {
+  if (id === user?.tenantId) {
     if (user.role === "TENANT" || user.role === "STAFF") {
       return (
         <section className="my-12">
@@ -94,5 +98,4 @@ const TenantClientAdminPage = async ({ params }: Props) => {
       );
     }
   }
-};
-export default TenantClientAdminPage;
+}

@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { User } from "./schema";
 
 import { DataTableRowActions } from "./data-table-row-action";
+import { UserType } from "@/lib/db/schema";
 
 // export const Tenant = typeof z.object({
 //   id: z.serial(),
@@ -10,26 +11,26 @@ import { DataTableRowActions } from "./data-table-row-action";
 //   edit: z.string(),
 // });
 // const router = useRouter();
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<UserType>[] = [
   {
     accessorKey: "id",
-    header: "User Id",
+    header: "Id",
   },
   {
     accessorKey: "firstName",
-    header: "User Name",
+    header: "Firstname",
   },
   {
     accessorKey: "lastName",
-    header: "User Name",
+    header: "Lastname",
   },
   {
     accessorKey: "email",
-    header: "User Email",
+    header: "Email",
   },
   {
     accessorKey: "role",
-    header: "User Role",
+    header: "Role",
   },
   {
     id: "actions",

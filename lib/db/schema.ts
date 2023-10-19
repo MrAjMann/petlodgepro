@@ -30,7 +30,7 @@ export const pets = pgTable("pets", {
 export const roleEnum = pgEnum('role', ['PLPADMIN','TENANT','STAFF', 'CLIENT'])
 
 export const users = pgTable("user", {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
   firstName: text("firstName"),
   lastName: text("lastName"),
   email: text("email").unique().notNull(),
@@ -97,3 +97,4 @@ export const verificationTokens = pgTable(
 
 export type TenantType = typeof tenants.$inferInsert
 export type UserType = typeof users.$inferInsert
+export type PetType = typeof pets.$inferInsert

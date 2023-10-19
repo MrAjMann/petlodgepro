@@ -1,12 +1,12 @@
-type User = typeof users.$inferSelect;
-type Pet = typeof users.$inferSelect;
-
 import { db } from "@/lib/db";
-import { pets, users } from "@/lib/db/schema";
+import { PetType, pets } from "@/lib/db/schema";
 import { authOptions } from "@/lib/utils/authOptions";
 import { eq } from "drizzle-orm";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
+import PetCard from "./components/petCard";
+import { User } from "../clients/schema";
+import { NextResponse } from "next/server";
 
 type Props = {
   params: {
@@ -14,71 +14,91 @@ type Props = {
   };
 };
 
-const UserPetsPage = async ({ params }: Props) => {
+export default async function UserPetsPage({
+  params: { id },
+}: {
+  params: { id: string };
+}) {
   const session = await getServerSession(authOptions);
-  const currentUser = session?.user;
+  const user = session?.user;
 
   const selectedUserPets = await db
     .select()
-    .from(users)
-    .where(eq(pets.ownerId, currentUser.id))
-    .leftJoin(pets, eq(users.id, pets.ownerId));
+    .from(pets)
+    .where(eq(pets.ownerId, user.id));
 
-  const allPets = await db.select().from(pets);
-
-  const userPets = selectedUserPets.map((pet) => pet.pets);
-  if (userPets.length < 1) {
+  if (!selectedUserPets) {
     return (
-      <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-slate-500 flex flex-col justify-center gap-4">
-        <p className="text-2xl">No pets have been added</p>
+      <section className="my-14">
         <div>
-          <Link
-            className="rounded-lg flex flex-col justify-center items-center px-2 py-4 bg-white min-w-[300px] text-gray-700 font-semibold"
-            href={"./pets/create"}
-          >
-            Add Pet
-          </Link>
+          <h1 className="text-4xl text-primary-foreground ">Your Pets</h1>
         </div>
-      </div>
+        <div className="seperator"></div>
+        <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-slate-500 flex flex-col justify-center gap-4">
+          <p className="text-2xl">No pets have been added</p>
+          <div>
+            <Link
+              className="rounded-lg flex flex-col justify-center items-center px-2 py-4 bg-white min-w-[300px] text-gray-700 font-semibold"
+              href={"./pets/create"}
+            >
+              Add Pet
+            </Link>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const userPets = selectedUserPets;
+
+  if (!user) {
+    return {
+      props: {
+        user: null,
+        userPets: undefined,
+      },
+    };
+  }
+
+  if (!user) {
+    return <section className="my-14">{/* ... */}</section>;
+  }
+  if (!userPets || userPets.length === 0) {
+    return (
+      <section className="my-14">
+        <div>
+          <h1 className="text-4xl text-primary-foreground ">Your Pets</h1>
+        </div>
+        <div className="seperator"></div>
+        <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-slate-500 flex flex-col justify-center gap-4">
+          <p className="text-2xl">No pets have been added</p>
+          <div>
+            <Link
+              className="rounded-lg flex flex-col justify-center items-center px-2 py-4 bg-white min-w-[300px] text-gray-700 font-semibold"
+              href={"./pets/create"}
+            >
+              Add Pet
+            </Link>
+          </div>
+        </div>
+      </section>
     );
   }
 
   return (
-    <section className="min-h-screen">
-      <div>
-        {currentUser.role === "CLIENT" && (
+    <section className=" overflow-hidden">
+      {user.role === "CLIENT" && (
+        <div>
           <div>
-            <div>
-              <h1>Your Pets</h1>
-              <div>
-                {userPets.map((pets) => (
-                  <div key={pets?.id}>
-                    <p className="text-white text-2xl">{pets?.petName}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <h1 className="text-4xl text-primary-foreground ">Your Pets</h1>
           </div>
-        )}
-      </div>
-      <div>
-        {currentUser.role === "STAFF" && (
-          <div>
-            <div>
-              <h1>View all pets</h1>
-              <div>
-                {allPets.map((pets) => (
-                  <div key={pets?.id}>
-                    <p className="text-white text-2xl">{pets?.petName}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="seperator "></div>
+          <div className="h-24"></div>
+          <div className="flex flex-col items-center h-full my-1 justify-center">
+            <PetCard data={userPets} />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
-};
-
-export default UserPetsPage;
+}

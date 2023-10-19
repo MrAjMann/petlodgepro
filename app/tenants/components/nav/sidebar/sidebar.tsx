@@ -29,7 +29,7 @@ export function Sidebar({ className }: SidebarProps) {
 
   const tenantId = session?.user?.tenantId;
   return (
-    <div className={cn("pb-12 min-h-screen ", className)}>
+    <div className={cn("overflow-hidden", className)}>
       <div className="space-y-4 py-4">
         <div className=" px-3 py-2">
           <div className="my-8 px-4 ">

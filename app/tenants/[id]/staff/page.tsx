@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
 import { UserType, users } from "@/lib/db/schema";
 
-import { eq, and } from "drizzle-orm";
-import { DashboardOverviewPanel } from "../../components/dashboardOverviewPanel";
 import Link from "next/link";
 
 import StaffViewer from "../../components/staffViewer";
-import { useParams } from "next/navigation";
+
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/utils/authOptions";
 
 type Props = {
   params: {
@@ -19,10 +19,8 @@ export async function getUserData(): Promise<UserType[]> {
 }
 
 const TenantStaffAdminPage = async ({ params }: Props) => {
-  const res = await db
-    .select()
-    .from(users)
-    .where(and(eq(users.tenantId, params.id), eq(users.role, "TENANT")));
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
 
   const allUsers = await getUserData().then((value) => {
     return value;
@@ -31,8 +29,6 @@ const TenantStaffAdminPage = async ({ params }: Props) => {
   const StaffOnlyUsers = allUsers.filter(
     (users) => users.role === "STAFF" || users.role === "TENANT"
   );
-
-  const user = res[0];
 
   if (params.id === user?.tenantId) {
     if (user.role === "TENANT") {
@@ -49,7 +45,7 @@ const TenantStaffAdminPage = async ({ params }: Props) => {
               </Link>
             </div>
           </div>
-          <div className="relative my-14 flex  mx-48  justify-center items-center  border border-slate-400 rounded-lg px-12  font-semibold text-gray-200">
+          <div className="relative my-14 flex mx-auto   justify-center items-center  border border-slate-400 rounded-lg px-12  font-semibold text-gray-200 max-w-[1600px]">
             <StaffViewer data={StaffOnlyUsers} />
           </div>
         </section>

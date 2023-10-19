@@ -19,7 +19,7 @@ const UserProfilePage = async ({ params }: Props) => {
     .where(and(eq(users.tenantId, params.id), eq(users.id, session?.user.id)));
 
   const user = res[0];
-  console.log(user);
+  // console.log(user);
   if (params.id === user?.tenantId || user) {
     if (user.role === "CLIENT") {
       return (
