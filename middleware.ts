@@ -4,15 +4,15 @@ import { redirect } from 'next/navigation'
 // More on how NextAuth.js middleware works: https://next-auth.js.org/configuration/nextjs#middleware
 export default withAuth(
   
-  function middleware(req, token) {
-    // if (req.nextUrl.pathname === "/") {
+  // function middleware(req, token) {
+  //   if (req.nextUrl.pathname === "/") {
      
-      // if (token?.?.tenantId === token?.tenantId && token?.role === "CLIENT ") {
-      //   redirect(`/tenant/${token.tenantId}/profile`)
-      // }
-    // }
+  //     if (token?. === token?.tenantId && token?.role === "CLIENT ") {
+  //       redirect(`/tenant/${token.tenantId}/profile`)
+  //     }
+  //   }
 
-  },
+  // },
   
   {
 
@@ -20,6 +20,12 @@ export default withAuth(
     authorized({ req, token }) {
       // requires admin role
       // `/tenant` 
+      console.log('token tenant id', token?.user?.tenantId)
+      if (req.nextUrl.pathname === '/') {
+        if (token?.user?.tenantId === token?.tenantId ) {
+          redirect(`/`)
+        }
+      }
       if (req.nextUrl.pathname === "/tenants") {
         
         if (token?.user?.tenantId === token?.tenantId && token?.role === "CLIENT || STAFF") {

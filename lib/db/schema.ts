@@ -4,7 +4,7 @@ import type { AdapterAccount } from "@auth/core/adapters"
 
 
 export const tenants = pgTable("tenants", {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
+  tenantId: text('tenantId').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
   tenantName: varchar("tenantName", { length: 255 }).notNull(),
   tenantEmail: varchar("email", { length: 255 }).notNull().unique(),
   createdAt: timestamp("createdAt", {mode: 'string'}).notNull().defaultNow(),
@@ -34,7 +34,7 @@ export const users = pgTable("user", {
   firstName: text("firstName"),
   lastName: text("lastName"),
   email: text("email").unique().notNull(),
-  tenantId: text('tenantId').notNull().references(() => tenants.id),
+  tenantId: text('tenantId').notNull().references(() => tenants.tenantId),
   password: text("password").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
@@ -95,6 +95,6 @@ export const verificationTokens = pgTable(
 
 // Add PetsSchema
 
-export type TenantType = typeof tenants.$inferInsert
-export type UserType = typeof users.$inferInsert
-export type PetType = typeof pets.$inferInsert
+export type Tenant = typeof tenants.$inferInsert
+export type User = typeof users.$inferInsert
+export type Pet = typeof pets.$inferInsert

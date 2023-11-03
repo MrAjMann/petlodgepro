@@ -1,7 +1,7 @@
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { StaffOverviewPanel } from "../../components/staffOverviewPanel";
+import { StaffOverviewPanel } from "../components/staffOverviewPanel";
 
 type Props = {
   params: {

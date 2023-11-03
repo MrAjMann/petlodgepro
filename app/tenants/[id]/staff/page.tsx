@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { UserType, users } from "@/lib/db/schema";
+import { User, users } from "@/lib/db/schema";
 
 import Link from "next/link";
 
@@ -14,7 +14,7 @@ type Props = {
   };
 };
 
-export async function getUserData(): Promise<UserType[]> {
+export async function getUserData(): Promise<User[]> {
   return db.select().from(users);
 }
 

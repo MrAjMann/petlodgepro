@@ -28,7 +28,7 @@ import { db } from "@/lib/db";
 // import bcrypt from "bcrypt";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
+  firstName: z.string().min(1, {
     message: "Tenant Name must not be empty min (1) char",
   }),
   email: z
@@ -50,14 +50,14 @@ const SignUp = (props: Props) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
       email: "",
       password: "",
     },
   });
   const newUser = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const { name, email, password } = values;
+      const { firstName, email, password } = values;
 
       const checkUser = await axios.post(`/api/user/view`, {
         email,

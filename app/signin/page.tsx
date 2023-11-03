@@ -8,7 +8,7 @@ export default async function LoginPage() {
 
   const tenantId = await session?.user.tenantId;
   if (session?.user) {
-    redirect(`/tenants/${tenantId}/profile`);
+    redirect(`/tenants/${tenantId}`);
   }
   return <Form />;
 }

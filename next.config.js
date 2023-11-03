@@ -2,7 +2,8 @@
 const nextConfig = {
   images: {
     domains: [
-      'carolefosterartist.com.au'
+      'carolefosterartist.com.au',
+      'fakeimg.pl'
     ]
   }
 }

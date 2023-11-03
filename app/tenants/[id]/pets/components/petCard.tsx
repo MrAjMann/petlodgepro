@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-import { PetType, pets } from "@/lib/db/schema";
+import { Pet, pets } from "@/lib/db/schema";
 
 import DropDownMenu from "./dropDownMenu";
 
-export default async function PetCard({ data }: { data: PetType[] }) {
+export default async function PetCard({ data }: { data: Pet[] }) {
   return (
     <div className="flex w-full bg-white rounded-lg inset-1 shadow-sm shadow-slate-500   max-w-7xl">
       {data.map((pet) => (
