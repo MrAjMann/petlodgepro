@@ -1,4 +1,4 @@
-"use state";
+"use client";
 
 import { DatePickerWithRange } from "@/components/DatePicker";
 import {
@@ -29,6 +29,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { TimePicker } from "@/components/timePicker";
+import { useState } from "react";
 type availabilityFormData = z.infer<typeof bookingFormSchema>;
 
 type availabilityFormProps = {
@@ -43,13 +44,13 @@ const services = [
 export default function CheckAvailability({ form }: availabilityFormProps) {
   return (
     <div>
-      <div className="space-y-4 py-2 pb-4">
+      <div className="space-y-8 py-2 pb-4">
         <FormField
           control={form.control}
           name="serviceValue"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="text-gray-600 font-medium text-lg ">
+              <FormLabel className="text-gray-700 font-medium  ">
                 Service
               </FormLabel>
               <Popover>
@@ -104,22 +105,26 @@ export default function CheckAvailability({ form }: availabilityFormProps) {
                   </Command>
                 </PopoverContent>
               </Popover>
-              <FormDescription>
-                This is the Service that will be used in the dashboard.
-              </FormDescription>
+
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-col gap-6">
-          <DatePickerWithRange />
-          <div className="flex gap-8">
+        <div className="flex flex-col  space-y-8 ">
+          <div className="flex flex-col gap-2">
+            <DatePickerWithRange />
+          </div>
+          <div className="flex space-x-8">
             <div className="flex flex-col gap-2">
-              <FormLabel>Check-In Time</FormLabel>
+              <FormLabel className="text-gray-700 font-medium ">
+                Check-In Time
+              </FormLabel>
               <TimePicker />
             </div>
             <div className="flex flex-col gap-2">
-              <FormLabel>Check-Out Time</FormLabel>
+              <FormLabel className="text-gray-700 font-medium ">
+                Check-Out Time
+              </FormLabel>
               <TimePicker />
             </div>
           </div>
@@ -129,7 +134,9 @@ export default function CheckAvailability({ form }: availabilityFormProps) {
           name={"numPets"}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number of Pets</FormLabel>
+              <FormLabel className="text-gray-700 font-medium ">
+                Number of Pets
+              </FormLabel>
               <FormControl>
                 <Input
                   // disabled={loading}

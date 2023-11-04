@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/popover";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
+import { FormLabel } from "./ui/form";
 
 export function DatePickerWithRange({
   className,
@@ -26,6 +27,9 @@ export function DatePickerWithRange({
   });
   return (
     <Popover>
+      <FormLabel className="text-gray-700 font-medium  ">
+        Select Dates
+      </FormLabel>
       <PopoverTrigger asChild>
         <Button
           id="date"

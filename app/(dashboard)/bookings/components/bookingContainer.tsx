@@ -1,90 +1,131 @@
 "use client";
 
+// Components are typically PascalCase and hooks start with 'use'
 import { useState } from "react";
-import TabBar from "./tabBar";
+
 import CustomerForm from "./CustomerForm";
 import RatesForm from "./RatesForm";
 import ServicesForm from "./ServicesForm";
 import SummaryView from "./SummaryView";
-import CheckAvailability from "./checkAvailability";
 
-import { Heading } from "@/components/ui/heading";
-import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-type Props = {};
+
+import { useRouter } from "next/navigation";
+import CheckAvailability from "./checkAvailability";
+import { Heading } from "@/components/ui/heading";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import TabBar from "./tabBar";
+
+// Constants and types are defined outside the component
+const initialActiveTab = "Check Availability";
+const tabOrder = [
+  "Check Availability",
+  "Customer",
+  "Set Rates",
+  "Services",
+  "Summary",
+];
 
 export const bookingFormSchema = z.object({
-  // Define your customer fields and validations
-  serviceValue: z.string().min(1),
+  serviceValue: z.string().nonempty(),
   numPets: z.number().min(0),
-
   // Add other fields as necessary
 });
 
-function BookingContainer({}: Props) {
-  const initialActiveTab = "Check Availability";
-  const [activeTab, setActiveTab] = useState<string>(initialActiveTab);
-  const [serviceValue, setServiceValue] = useState(null);
+type TabName =
+  | "Check Availability"
+  | "Customer"
+  | "Set Rates"
+  | "Services"
+  | "Summary";
+
+function getNextTab(currentTab: TabName, offset: number): TabName {
+  const currentIndex = tabOrder.indexOf(currentTab);
+  const nextIndex = (currentIndex + offset + tabOrder.length) % tabOrder.length;
+  return tabOrder[nextIndex] as TabName;
+}
+
+function BookingContainer() {
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabName>(initialActiveTab);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  type bookingFormData = z.infer<typeof bookingFormSchema>;
-
-  const form = useForm<z.infer<typeof bookingFormSchema>>({
+  const form = useForm({
     resolver: zodResolver(bookingFormSchema),
-
     defaultValues: {
-      serviceValue: "Boarding",
-      numPets: 1,
+      serviceValue: "",
+      numPets: 1, 
     },
   });
+  const advanceToNextTab = () => setActiveTab(getNextTab(activeTab, 1));
+  const handleTabBack = () => setActiveTab(getNextTab(activeTab, -1));
+  const handleFinalAction = () => setModalOpen(true);
 
-  // Function to handle tab click events
-  const handleTabClick = (tab: string) => {
-    // Check if the tab clicked is not already the active tab
-    if (tab !== activeTab) {
-      // Update the active tab state
-      setActiveTab(tab);
-      // Perform any additional actions for tab change, like data fetching
-      // fetchDataForTab(tab); // Example function call
-    }
-  };
-  const onSubmit = (data: bookingFormData) => {
-    // handle form submission
+  type BookingFormData = z.infer<typeof bookingFormSchema>;
+
+  const onSubmit = (data: BookingFormData) => {
     console.log(data);
     // Perform submission actions...
   };
+
+  const isLastTab = activeTab === tabOrder[tabOrder.length - 1];
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "Check Availability":
         return <CheckAvailability form={form} />;
       case "Customer":
-        return <CustomerForm />; // Replace with actual customer form component
+        return <CustomerForm />;
       case "Set Rates":
-        return <RatesForm />; // Replace with actual rates form component
+        return <RatesForm />;
       case "Services":
-        return <ServicesForm />; // Replace with actual services form component
+        return <ServicesForm />;
       case "Summary":
-        return <SummaryView />; // Replace with actual summary view component
+        return <SummaryView />;
       default:
         return null;
     }
   };
 
+  const renderButtons = () => (
+    <div className="pt-6 space-x-4 flex items-center justify-end w-full">
+      <Button
+        disabled={loading}
+        variant="outline"
+        onClick={() => router.push("/")}
+      >
+        Cancel
+      </Button>
+      {activeTab !== "Check Availability" && (
+        <Button disabled={loading} onClick={handleTabBack}>
+          Back
+        </Button>
+      )}
+      <Button
+        disabled={loading}
+        onClick={isLastTab ? handleFinalAction : advanceToNextTab}
+      >
+        {isLastTab ? "Create Booking" : "Continue"}
+      </Button>
+    </div>
+  );
+
   return (
     <div className="flex flex-col items-center justify-center flex-grow gap-8 w-4/5 max-w-screen-2xl mx-auto text-gray-700">
       <div className=" rounded-xl w-full max-w-screen-2xl">
         {/* Tabs */}
-        <TabBar activeTab={activeTab} onTabClick={handleTabClick} />
+        <TabBar activeTab={activeTab} />
       </div>
-      <div className="flex justify-center gap-4 w-full ">
-        <div className="shadow-lg rounded-xl w-full 2xl:min-h-[600px] bg-white px-8 py-2">
+      <div className="flex justify-center gap-4 w-full m-auto">
+        <div className="shadow-lg rounded-xl w-full 2xl:min-h-fit bg-white px-8 py-8">
           {/* Main content */}
-          <div className="flex flex-col  gap-4">
+          <div className="flex flex-col  gap-8">
             {/* Main section for input fields */}
-            <div className="items-center w-full justify-around border-b ">
+            <div className="items-center w-full justify-around border-b py-4">
               <Heading
                 title={"New Booking"}
                 description={""}
@@ -94,12 +135,13 @@ function BookingContainer({}: Props) {
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="flex-1">{renderTabContent()}</div>
+                {renderButtons()}
               </form>
             </Form>
           </div>
         </div>
         {/* Summary Panel */}
-        <div className="max-h-1/3 flex flex-col  min-w-[200px] p-4 bg-gray-50 rounded-lg ">
+        <div className=" flex flex-col  min-w-[300px] p-4 bg-gray-50 rounded-lg ">
           {/* Summary information goes here */}
           <h4 className="text-gray-700">Summary </h4>
         </div>

@@ -5,10 +5,9 @@ import React from "react";
 
 interface TabBarProps {
   activeTab: string;
-  onTabClick: (tab: string) => void;
 }
 
-const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabClick }) => {
+const TabBar: React.FC<TabBarProps> = ({ activeTab }) => {
   const tabs = [
     "Check Availability",
     "Customer",
@@ -22,18 +21,16 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabClick }) => {
       {tabs.map((tab, index) => (
         <React.Fragment key={index}>
           {/* Render the tab button */}
-          <button
+          <div
             className={`text-center py-3 px-4 text-lg font-medium ${
               activeTab === tab
                 ? "border-b-2 border-blue-500 text-blue-600"
                 : "text-gray-500"
-              } focus:outline-none`}
-            
-            onClick={() => onTabClick(tab)}
+            } focus:outline-none`}
             style={{ userSelect: "none", height: "3rem" }} // Increased height for tabs
           >
             {tab}
-          </button>
+          </div>
 
           {/* Render the chevron if it's not the last item */}
           {index < tabs.length - 1 && (
