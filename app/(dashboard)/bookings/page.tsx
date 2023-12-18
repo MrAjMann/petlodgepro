@@ -11,7 +11,6 @@ interface BookingsPageProps {
   initialActiveTab: string;
 }
 
-
 const BookingsPage: React.FC<BookingsPageProps> = ({ initialActiveTab }) => {
   const todaysDate = getTodaysDate();
 
@@ -23,12 +22,9 @@ const BookingsPage: React.FC<BookingsPageProps> = ({ initialActiveTab }) => {
       </div>
 
       {/* Only change from this */}
-      <BookingContainer  />
+      <BookingContainer />
     </div>
   );
 };
-
-//   );
-// };
 
 export default BookingsPage;
