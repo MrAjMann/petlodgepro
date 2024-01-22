@@ -1,16 +1,33 @@
-import { pgTable,timestamp,varchar,integer, primaryKey, text, serial, pgEnum,boolean } from 'drizzle-orm/pg-core';
+import { pgTable, timestamp, varchar, integer, primaryKey, text, serial, pgEnum, boolean } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from "@auth/core/adapters"
 
+export const roleEnum = pgEnum('role', ['PLPADMIN', 'TENANT', 'STAFF', 'CLIENT'])
 
-
-export const tenants = pgTable("tenants", {
+type TenantTable = ReturnType<typeof pgTable>;
+export const tenants: TenantTable = pgTable("tenants", {
   tenantId: text('tenantId').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
-  tenantName: varchar("tenantName", { length: 255 }).notNull(),
+  ownerUserId: text('ownerUserId').references(() => users.id),
+  tenantBusinessName: varchar("tenantBusinessName", { length: 255 }).notNull(),
+  tenantOwnerFirstName: varchar("tenantOwnerFirstName", { length: 255 }).notNull(),
+  tenantOwnerLastName: varchar("tenantOwnerLastName", { length: 255 }).notNull(),
+  tenantRole: roleEnum('role').default('TENANT'),
   tenantEmail: varchar("email", { length: 255 }).notNull().unique(),
-  createdAt: timestamp("createdAt", {mode: 'string'}).notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt", {mode: 'string'}).notNull().defaultNow()
+  createdAt: timestamp("createdAt", { mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: 'string' }).notNull().defaultNow()
 })
 
+type UserTable = ReturnType<typeof pgTable>;
+export const users: UserTable = pgTable("user", {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
+  firstName: text("firstName"),
+  lastName: text("lastName"),
+  email: text("email").unique().notNull(),
+  tenantId: text('tenantId').notNull().references(() => tenants.tenantId),
+  password: text("password").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  role: roleEnum('role').default('CLIENT'),
+})
 
 export const pets = pgTable("pets", {
   id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
@@ -23,24 +40,10 @@ export const pets = pgTable("pets", {
   petTemperament: text("petTemperament"),
   petMedicalConditions: text("petMedicalConditions"),
   petImages: text("petImages"),
-  createdAt: timestamp("createdAt", {mode: 'string'}).notNull().defaultNow(),
-  updatedAt: timestamp("updatedAt", {mode: 'string'}).notNull().defaultNow()
+  createdAt: timestamp("createdAt", { mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: 'string' }).notNull().defaultNow()
 })
 
-export const roleEnum = pgEnum('role', ['PLPADMIN','TENANT','STAFF', 'CLIENT'])
-
-export const users = pgTable("user", {
-  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()).notNull(),
-  firstName: text("firstName"),
-  lastName: text("lastName"),
-  email: text("email").unique().notNull(),
-  tenantId: text('tenantId').notNull().references(() => tenants.tenantId),
-  password: text("password").notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image"),
-  role: roleEnum('role').default('CLIENT'),
-  
-})
 
 export const accounts = pgTable(
   "account",
@@ -84,17 +87,6 @@ export const verificationTokens = pgTable(
   })
 )
 
-
-
-// Add StaffSchema
-
-
-
-// Add ClientsSchema
-
-
-// Add PetsSchema
-
-export type Tenant = typeof tenants.$inferInsert
-export type User = typeof users.$inferInsert
 export type Pet = typeof pets.$inferInsert
+export type User = typeof users.$inferInsert
+export type Tenant = typeof tenants.$inferInsert

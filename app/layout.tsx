@@ -3,9 +3,10 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import Header from "./components/navigation/header";
-import { Session } from "@auth/core/types";
+
 import NavMenu from "./components/navigation/navbar";
 import { Sidebar } from "../components/sidebar";
+import { Session } from "next-auth";
 export const metadata: Metadata = {
   title: "PetLodgePro",
   description:

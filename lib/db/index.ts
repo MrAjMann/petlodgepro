@@ -1,15 +1,18 @@
-import { neon, neonConfig } from '@neondatabase/serverless'
+import { Pool } from '@neondatabase/serverless'
 import * as schema from './schema'
-import { drizzle } from 'drizzle-orm/neon-http'
-// import { migrate } from 'drizzle-orm/neon-http/migrator';
-
-neonConfig.fetchConnectionCache = true
+import { drizzle } from 'drizzle-orm/neon-serverless';
 
 
-const sql = neon(process.env.DATABASE_URL!)
+const connectionString = process.env.DATABASE_URL!;
+if (!connectionString) {
+    console.error("Environment Variables:", process.env!); // Log all environment variables for debugging
+}
 
 
-export const db = drizzle(sql, {schema});
+const pool = new Pool({ connectionString });
+
+
+export const db = drizzle(pool, { schema });
 export type DBCLIENT = typeof db
 
 
