@@ -7,7 +7,8 @@ import { UserRole } from "@/lib/utils/UserRoleEnums";
 import SidebarLinks from "./sidebar/SidebarLinks";
 import { authOptions } from "@/lib/utils/authOptions";
 import { getServerSession } from "next-auth";
-import { getTenantData } from "@/lib/utils/getTenantData";
+import axios from "axios";
+import { error } from "console";
 
 
 export async function Sidebar({ className }: SidebarProps) {
@@ -15,8 +16,20 @@ export async function Sidebar({ className }: SidebarProps) {
   const tenantId = session?.user?.tenantId;
   const userId = session?.user?.userId;
   const role = session?.user?.role as UserRole;
-  const tenantData = await getTenantData();
-  const tenantName = tenantData?.tenantBusinessName;
+  TODO: "create func to check if baseurl is localhost or prod"
+  const tenantData =  await axios.get(`http://localhost:3001/api/tenants/${tenantId}`).then(res => {
+    return res.data
+  }, error => {
+    console.log(error)
+    if (error.response.status === 401) {
+      console.log("error", error.response.data)
+      return null
+    }
+  });
+  console.log(tenantData)
+
+
+
 
   return (
     <div className={cn(" ", className)}>
@@ -30,7 +43,7 @@ export async function Sidebar({ className }: SidebarProps) {
           <div className=" flex flex-col mx-8">
           <span className="flex gap-4 text-red-400">
 
-<p>{tenantName}</p>
+<p>{tenantData.tenantBusinessName}</p>
   <p>{role}</p>
   </span>
             {session && (
