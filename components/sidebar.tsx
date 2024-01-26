@@ -42,7 +42,7 @@ export async function Sidebar({ className }: SidebarProps) {
           </div>
           <div className=" flex flex-col mx-8">
           <span className="flex gap-4 text-red-400">
-
+TODO: "remove tenant business name and user role from sidebar" 
 <p>{tenantData.tenantBusinessName}</p>
   <p>{role}</p>
   </span>
