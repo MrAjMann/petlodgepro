@@ -26,7 +26,7 @@ As petlodge is currently under development, we are unable to provide up to date 
 We are currently not accepting contributions to the project. However, we will be looking for beta testers in the near future. If you are interested in becoming a beta tester, please contact us at petlodgepro.com.au
 
 ## License
-This software and its documentation are proprietary to Anthony Mann, trading as PetLodgePro, and protected under copyright laws. Use, distribution, or modification of this software and its documentation are strictly prohibited unless expressly authorized by a license agreement provided by Anthony Mann, trading as PetLodgePro. For more information on obtaining a license to use this software, please use the contact form at https://petlodgepro.com.au or see [LICENSE.md](LICENSE.md).
+This software and its documentation are proprietary to Anthony Mann, trading as PetLodgePro, and protected under copyright laws. Use, distribution, or modification of this software and its documentation are strictly prohibited unless expressly authorized by a license agreement provided by Anthony Mann, trading as PetLodgePro. For more information on obtaining a license to use this software, please use the contact form at https://petlodgepro.com.au.
 
 This software is provided under a Proprietary License Agreement, which outlines the terms and conditions for its use, distribution, and
 
