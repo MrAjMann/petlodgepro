@@ -29,3 +29,5 @@ We are currently not accepting contributions to the project. However, we will be
 This software and its documentation are proprietary to Anthony Mann, trading as PetLodgePro, and protected under copyright laws. Use, distribution, or modification of this software and its documentation are strictly prohibited unless expressly authorized by a license agreement provided by Anthony Mann, trading as PetLodgePro. For more information on obtaining a license to use this software, please use the contact form at https://petlodgepro.com.au or see [LICENSE.md](LICENSE.md).
 
 This software is provided under a Proprietary License Agreement, which outlines the terms and conditions for its use, distribution, and
+
+This software is provided under a Proprietary License Agreement, which outlines the terms and conditions for its use, distribution, and modification. The full text of the license agreement is available in the [LICENSE](LICENSE.md) file included with this software.
