@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 
 type SidebarLinkProps = {
@@ -17,5 +18,12 @@ const SidebarLinkBuilder: React.FC<SidebarLinkProps> = ({ href, icon, text }) =>
 
 export default SidebarLinkBuilder;
 
+
+export const SettingLinks: React.FC<SidebarLinkProps> = ({href, icon, text}) => (
+  <Link href = {href} className=" flex  gap-4 p-2 ">
+    {icon}
+    <span>{text}</span> 
+  </Link>
+);
 
 
