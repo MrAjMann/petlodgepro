@@ -68,7 +68,7 @@ function BookingContainer() {
   type BookingFormData = z.infer<typeof bookingFormSchema>;
 
   const onSubmit = (data: BookingFormData) => {
-    console.log(data);
+    console.log("booking data");
     // Perform submission actions...
   };
 

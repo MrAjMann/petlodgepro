@@ -1,5 +1,5 @@
 import { ElementType, ReactElement } from "react";
-import { Home, User, Dog, Calendar, DollarSign, Image, Link } from "lucide-react";
+import { Home, User, Dog, Calendar, DollarSign, Image, Link, Cog } from "lucide-react";
 
 // Define the type for individual link data
 export type LinkData = {
@@ -37,8 +37,8 @@ export const clientLinks: LinkData[] = [
   },
   {
     href: "/settings",
-    icon: <Dog className="mr-4 w-6 h-6" />,
-    text: "Pets",
+    icon: <Cog className="mr-4 w-6 h-6" />,
+    text: "Settings",
   },
 ];
 

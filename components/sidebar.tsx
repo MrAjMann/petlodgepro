@@ -19,16 +19,19 @@ export async function Sidebar({ className }: SidebarProps) {
   const role = session?.user?.role as UserRole;
   TODO: "create func to check if baseurl is localhost or prod"
   TODO: "Remove tenant business name and user role from sidebar"
+  if (!tenantId) {
+    return null;
+  }
+
   const tenantData =  await axios.get(`http://localhost:3001/api/tenants/${tenantId}`).then(res => {
     return res.data
   }, error => {
-    console.log(error)
+    console.error(error)
     if (error.response.status === 401) {
-      console.log("error", error.response.data)
+      console.error("error", error.response.data)
       return null
     }
   });
-  console.log(tenantData)
   const nonAuthenticatedLinks = [
     {
       href: "/profile",

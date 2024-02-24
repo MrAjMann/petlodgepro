@@ -6,7 +6,6 @@ import { LinkData,  clientLinks,
   tenantLinks, } from './linkData';
 import { UserRole } from '@/lib/utils/UserRoleEnums';
 import SidebarLinkBuilder from './SidebarLinkBuilder';
-import {SettingLinks} from './SidebarLinkBuilder';
 import { useSession } from 'next-auth/react';
 
 
@@ -57,7 +56,7 @@ export default function SidebarLinks() {
       <div className="flex flex-col gap-6 items-center">
       {linksToRender.map((link) => (
         <SidebarLinkBuilder
-        key={link.text}
+        key={link.href}
         href={link.href}
         icon={link.icon}
         text={link.text}
